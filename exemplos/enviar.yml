@@ -1,0 +1,29 @@
+name: Email Diario
+
+on:
+  workflow_dispatch:      # único gatilho: chamado pelo agendador externo (ou botão manual)
+
+jobs:
+  enviar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install gspread
+
+      - name: Criar credentials.json
+        env:
+          CREDENTIALS_JSON: ${{ secrets.CREDENTIALS_JSON }}
+        run: python -c "import os; open('credentials.json', 'w').write(os.environ['CREDENTIALS_JSON'])"
+
+      - name: Enviar e-mails
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+        run: python enviar.py

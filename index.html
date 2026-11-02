@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Automação de E-mails — Clínica de Saúde Mental</title>
+<meta name="description" content="Pipeline 100% em nuvem que dispara e-mails diários personalizados via GitHub Actions, cron-job.org e Google Workspace." />
+<style>
+:root{
+  --bg:#0f172a; --surface:#1e293b; --card:#ffffff; --text:#1f2937; --muted:#64748b;
+  --accent:#0891b2; --accent-dark:#0e7490; --accent-soft:#cffafe;
+  --border:#e5e7eb; --border-dark:#334155;
+  --success:#10b981; --warn:#f59e0b; --danger:#ef4444;
+  --code-bg:#0f172a; --code-text:#e2e8f0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Ubuntu,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+.hero{background:linear-gradient(135deg,#0891b2 0%,#0e7490 50%,#155e75 100%);color:#fff;padding:80px 24px 72px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.12) 0,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.08) 0,transparent 50%);pointer-events:none}
+.hero-inner{max-width:900px;margin:0 auto;position:relative;z-index:1}
+.hero h1{font-size:2.8rem;letter-spacing:-1px;margin-bottom:16px;font-weight:700}
+.hero .subtitle{font-size:1.15rem;color:#cffafe;max-width:720px;margin:0 auto 28px;font-weight:300}
+.badges{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.badge{background:rgba(255,255,255,.18);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);padding:8px 18px;border-radius:999px;font-size:.88rem;font-weight:500}
+.wrap{max-width:960px;margin:-40px auto 0;padding:0 24px 64px;position:relative;z-index:2}
+section{background:var(--card);border-radius:16px;padding:36px 40px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.05),0 10px 40px rgba(0,0,0,.08);border:1px solid var(--border)}
+h2{color:var(--accent-dark);font-size:1.6rem;margin-bottom:20px;padding-bottom:14px;border-bottom:3px solid var(--accent-soft);display:flex;align-items:center;gap:12px}
+h2::before{content:"";width:6px;height:32px;background:var(--accent);border-radius:3px}
+h3{color:#0e7490;font-size:1.1rem;margin:24px 0 10px}
+p{margin-bottom:12px}
+ul,ol{margin:12px 0 12px 24px}
+li{margin-bottom:6px}
+a{color:var(--accent-dark);text-decoration:none;font-weight:500}
+a:hover{text-decoration:underline}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
+.stack-card{background:linear-gradient(135deg,#f0f9ff,#ecfeff);border:1px solid #a5f3fc;border-radius:10px;padding:16px}
+.stack-card strong{display:block;color:var(--accent-dark);font-size:1.05rem;margin-bottom:4px}
+.stack-card span{color:var(--muted);font-size:.88rem}
+.pipeline{background:#f8fafc;border-radius:12px;padding:24px;border:1px solid var(--border);margin:20px 0}
+.pipeline pre{margin:0;white-space:pre-wrap;font-size:.88rem}
+pre{background:var(--code-bg);color:var(--code-text);padding:20px 22px;border-radius:10px;overflow-x:auto;font-size:.85rem;line-height:1.6;margin:16px 0}
+code{font-family:"Cascadia Code",Consolas,"SF Mono",monospace}
+p code,li code{background:#e2e8f0;color:#0f172a;padding:2px 8px;border-radius:6px;font-size:.85em}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.93rem}
+th{background:var(--accent);color:#fff;padding:12px 16px;text-align:left;font-weight:600}
+td{padding:12px 16px;border-bottom:1px solid var(--border)}
+tbody tr:hover{background:#f8fafc}
+.callout{border-left:4px solid;padding:16px 20px;border-radius:8px;margin:18px 0}
+.callout-note{background:#eff6ff;border-color:#3b82f6}
+.callout-warn{background:#fffbeb;border-color:var(--warn)}
+.callout-success{background:#ecfdf5;border-color:var(--success)}
+.callout strong{display:block;margin-bottom:6px;color:#1f2937}
+footer{color:var(--muted);font-size:.88rem;text-align:center;padding:32px 24px;background:var(--surface)}
+footer strong{color:#fff}
+@media(max-width:720px){
+  .hero h1{font-size:2rem}
+  section{padding:24px}
+  .stack-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>📬 Automação de E-mails Diários</h1>
+    <p class="subtitle">Pipeline 100% em nuvem que dispara e-mails personalizados para uma clínica internacional de saúde mental — eliminando tarefas repetitivas e liberando tempo da equipe para o atendimento clínico.</p>
+    <div class="badges">
+      <span class="badge">✅ Concluído</span>
+      <span class="badge">⏰ 09:00 America/New_York</span>
+      <span class="badge">☁️ 100% nuvem</span>
+      <span class="badge">💸 Custo zero</span>
+      <span class="badge">🎓 PUCPR · IA</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section>
+  <h2>Visão geral</h2>
+  <p>O sistema lê diariamente uma planilha Google com mensagens programadas por data, filtra a do dia atual, monta um e-mail HTML personalizado para cada destinatário e envia via SMTP do Google Workspace — tudo rodando na nuvem, sem computador ligado.</p>
+  <ul>
+    <li><strong>O que faz:</strong> dispara um e-mail personalizado todo dia às 09:00 ET para a lista de contatos da clínica.</li>
+    <li><strong>Para quem:</strong> pacientes, líderes comunitários e assistentes sociais em formação atendidos pela clínica.</li>
+    <li><strong>O que entrega:</strong> e-mail HTML com saudação personalizada, mensagem do dia e imagem embutida.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Contexto, problema e solução</h2>
+  <div class="callout callout-note">
+    <strong>Problema</strong>
+    A clínica mantinha a rotina manual de enviar diariamente um e-mail com reflexão e imagem para sua lista de contatos. A tarefa consumia tempo operacional e dependia da disponibilidade de uma pessoa específica.
+  </div>
+  <div class="callout callout-success">
+    <strong>Solução</strong>
+    Automatizar o ciclo em 4 etapas: <strong>agendamento</strong> (cron-job.org às 09:00 ET com DST automático) → <strong>orquestração</strong> (GitHub Actions liga servidor e injeta credenciais via Secrets) → <strong>processamento</strong> (Python filtra a mensagem do dia) → <strong>entrega</strong> (SMTP do Workspace com pausa anti-sobrecarga).
+  </div>
+</section>
+
+<section>
+  <h2>Stack utilizada</h2>
+  <div class="stack-grid">
+    <div class="stack-card"><strong>🐍 Python 3.12</strong><span>gspread, smtplib, zoneinfo</span></div>
+    <div class="stack-card"><strong>⚙️ GitHub Actions</strong><span>Execução em ubuntu-latest</span></div>
+    <div class="stack-card"><strong>⏰ cron-job.org</strong><span>Agendamento com timezone nativo</span></div>
+    <div class="stack-card"><strong>📊 Google Sheets</strong><span>Banco de conteúdo e destinatários</span></div>
+    <div class="stack-card"><strong>🔐 Google Cloud</strong><span>Service account para leitura</span></div>
+    <div class="stack-card"><strong>📧 Workspace SMTP</strong><span>smtp.gmail.com:465 (SSL)</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Diagrama do pipeline</h2>
+  <div class="pipeline">
+    <pre>cron-job.org (09:00 America/New_York)
+        │ POST na API do GitHub (workflow_dispatch + PAT fine-grained)
+        ▼
+GitHub Actions (ubuntu-latest, Python 3.12)
+        │ injeta Secrets (GMAIL_USER, GMAIL_APP_PASS, CREDENTIALS_JSON)
+        ▼
+enviar.py ── lê a planilha via service account (gspread)
+        │ filtra mensagem do dia no fuso da Flórida
+        │ monta HTML personalizado por destinatário
+        ▼
+Gmail SMTP Workspace
+        │ pausa de 1s entre envios
+        ▼
+Clientes — "Hello {nome} - {mensagem}" + imagem</pre>
+  </div>
+</section>
+
+<section>
+  <h2>Decisões técnicas justificadas</h2>
+  <table>
+    <tr><th>Decisão</th><th>Justificativa</th></tr>
+    <tr><td>n8n → GitHub Actions</td><td>Fim do período gratuito do n8n levou a uma solução autônoma, gerando economia e mais segurança dos dados (crítico em saúde mental).</td></tr>
+    <tr><td>cron-job.org em vez do cron nativo do GitHub</td><td>Gatilho <code>schedule</code> mostrou instabilidade em repos novos; cron-job.org oferece timezone nativo e DST automático.</td></tr>
+    <tr><td>Fuso via <code>zoneinfo</code></td><td><code>ZoneInfo("America/New_York")</code> imuniza o código a mudanças sazonais sem cálculos manuais.</td></tr>
+    <tr><td>Credenciais em Secrets</td><td>Nenhum segredo no código — placeholders + injeção em tempo de execução.</td></tr>
+    <tr><td>PAT fine-grained</td><td>Escopo mínimo (Actions R/W em 1 repo) em vez de PAT clássico global.</td></tr>
+    <tr><td>Dia sem mensagem = silêncio</td><td>Evita e-mails vazios; comportamento intencional.</td></tr>
+    <tr><td>Pausa de 1s entre envios</td><td>Evita sobrecarga do SMTP e risco de bloqueio por volume.</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Segurança</h2>
+  <ul>
+    <li>Repositório de produção <strong>privado</strong>; este é o repo público de demonstração.</li>
+    <li>Segredos apenas em GitHub Secrets e no cron-job.org (header do job).</li>
+    <li>PAT fine-grained com escopo mínimo.</li>
+    <li>Service account com acesso de <strong>leitura</strong> apenas à planilha.</li>
+    <li>App password em vez da senha real da conta.</li>
+    <li>Credenciais locais existem apenas para testes manuais e <strong>nunca são commitadas</strong>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>ODS e ESG</h2>
+  <div class="stack-grid">
+    <div class="stack-card"><strong>🏥 ODS 3</strong><span>Saúde e Bem-estar</span></div>
+    <div class="stack-card"><strong>💼 ODS 8</strong><span>Trabalho decente</span></div>
+    <div class="stack-card"><strong>🏭 ODS 9</strong><span>Inovação e infraestrutura</span></div>
+    <div class="stack-card"><strong>🤝 ODS 17</strong><span>Parcerias universidade-empresa</span></div>
+    <div class="stack-card"><strong>⚖️ ESG</strong><span>Governança e redução de falhas</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Roadmap</h2>
+  <ul>
+    <li>Layout HTML com identidade visual da clínica (cores, logo, botão).</li>
+    <li>Coluna <code>ATIVO</code> na Página1 para pausar destinatários sem excluir.</li>
+    <li>Registrar status de envio de volta na planilha (coluna <code>LAST SENT</code>).</li>
+    <li>Mensagens segmentadas por grupo de clientes (incl. versão em português).</li>
+    <li>Anexos reais (PDF) além da imagem embutida.</li>
+  </ul>
+</section>
+
+</div>
+
+<footer>
+  <p>Prática Extensionista · <strong>PUCPR — Inteligência Artificial</strong></p>
+  <p style="margin-top:8px">Clínica Internacional de Saúde Mental</p>
+</footer>
+
+</body>
+</html>
