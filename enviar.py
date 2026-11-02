@@ -49,7 +49,7 @@ for r in recipients:
     )
 
     msg = MIMEMultipart()
-    msg["From"] = f"Nome da Clínica <{GMAIL_USER}>"
+    msg["From"] = f"Nome do Remetente <{GMAIL_USER}>"
     msg["To"] = email
     msg["Subject"] = f"How are you going {nome}?"
     msg.attach(MIMEText(html_body, "html"))
