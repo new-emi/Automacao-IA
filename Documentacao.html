@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Documentação do Projeto — Automação de E-mails</title>
+<meta name="description" content="Documentação técnica da automação diária de e-mails para Clínica de Saúde Mental" />
+<style>
+:root{
+  --bg:#f6f8fa; --surface:#ffffff; --text:#1f2937; --muted:#6b7280;
+  --accent:#0f766e; --accent-soft:#ccfbf1; --border:#e5e7eb;
+  --code-bg:#0f172a; --code-text:#e2e8f0;
+  --warn-bg:#fef3c7; --warn-border:#f59e0b;
+  --note-bg:#e0f2fe; --note-border:#0ea5e9;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Ubuntu,sans-serif;background:var(--bg);color:var(--text);line-height:1.65}
+.hero{background:linear-gradient(135deg,#0f766e 0%,#134e4a 60%,#0f172a 100%);color:#fff;padding:56px 24px 48px}
+.hero-inner{max-width:960px;margin:0 auto}
+.hero h1{margin:0 0 8px;font-size:2rem;letter-spacing:-.5px}
+.hero p{margin:0 0 20px;color:#ccfbf1;max-width:720px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:4px 12px;border-radius:999px;font-size:.8rem}
+.wrap{max-width:960px;margin:0 auto;padding:32px 24px 64px}
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:32px}
+.toc h2{margin:0 0 10px;font-size:.9rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);border:none;padding:0}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:4px 0;break-inside:avoid}
+.toc a{color:var(--text);text-decoration:none}
+.toc a:hover{color:var(--accent);text-decoration:underline}
+section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px 32px;margin-bottom:28px}
+h2{margin-top:0;color:var(--accent);font-size:1.35rem;border-bottom:2px solid var(--accent-soft);padding-bottom:8px}
+h3{color:#134e4a;font-size:1.05rem;margin:24px 0 8px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.92rem}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft);color:#134e4a}
+tr:nth-child(even) td{background:#f9fafb}
+pre{background:var(--code-bg);color:var(--code-text);padding:16px 18px;border-radius:10px;overflow-x:auto;font-size:.85rem;line-height:1.55}
+code{font-family:"Cascadia Code",Consolas,"SF Mono",Menlo,monospace}
+p code,li code,td code{background:#e2e8f0;color:#0f172a;padding:1px 6px;border-radius:6px;font-size:.85em}
+.note,.warn{border-left:4px solid;padding:12px 16px;border-radius:8px;margin:14px 0;font-size:.93rem}
+.note{background:var(--note-bg);border-color:var(--note-border)}
+.warn{background:var(--warn-bg);border-color:var(--warn-border)}
+footer{color:var(--muted);font-size:.85rem;text-align:center;padding:24px}
+@media(max-width:720px){.toc ol{columns:1}section{padding:20px}}
+@media print{.toc{display:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>📘 Documentação do Projeto — Automação de E-mails</h1>
+    <p>Automação diária de e-mails personalizados para Clínica de Saúde Mental: conteúdo programado em planilha Google, execução 100% em nuvem via GitHub Actions e agendamento com fuso horário nativo.</p>
+    <div class="badges">
+      <span class="badge">✅ Concluído</span>
+      <span class="badge">⏰ Diário · 09:00 America/New_York</span>
+      <span class="badge">☁️ 100% nuvem</span>
+      <span class="badge">💸 Custo zero</span>
+      <span class="badge">🐍 Python · GitHub Actions · Google Sheets</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <h2>Sumário</h2>
+  <ol>
+    <li><a href="#visao">Visão geral</a></li>
+    <li><a href="#arquitetura">Arquitetura</a></li>
+    <li><a href="#planilha">A planilha</a></li>
+    <li><a href="#credenciais">Credenciais</a></li>
+    <li><a href="#codigo">Código</a></li>
+    <li><a href="#operacao">Operação no dia a dia</a></li>
+    <li><a href="#manutencao">Manutenção</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
+    <li><a href="#seguranca">Segurança</a></li>
+    <li><a href="#historico">Histórico de decisões</a></li>
+    <li><a href="#reconstruir">Reconstruir do zero</a></li>
+    <li><a href="#evolucoes">Evoluções futuras</a></li>
+  </ol>
+</nav>
+
+<section id="visao">
+  <h2>1. Visão geral</h2>
+  <p>Sistema de envio diário de e-mails personalizados para a lista de clientes da clínica. O conteúdo do dia (mensagem + imagem) é programado por data numa planilha Google; os destinatários vêm da mesma planilha. Roda 100% na nuvem, sem necessidade de computador ligado.</p>
+  <div class="note"><strong>Regra de comportamento:</strong> dia sem mensagem cadastrada na planilha = dia sem envio (silencioso, sem erro, sem e-mail vazio).</div>
+</section>
+
+<section id="arquitetura">
+  <h2>2. Arquitetura</h2>
+<pre>[cron-job.org] ── todo dia 09:00 (America/New_York, DST automático)
+       │  POST na API do GitHub (workflow_dispatch + token PAT)
+       ▼
+[GitHub Actions] workflow "Email Diario" (ubuntu-latest, Python 3.12)
+       │  injeta Secrets e executa enviar.py
+       ▼
+[enviar.py] ── lê a planilha via service account (gspread)
+       │  filtra mensagem do dia + monta HTML personalizado
+       ▼
+[Gmail SMTP Workspace] smtp.gmail.com:465 (conta da clínica)
+       ▼
+[Clientes] "How are you going {nome}?" → Hello {nome} - {mensagem} + imagem</pre>
+  <table>
+    <tr><th>Componente</th><th>Papel</th><th>Custo</th></tr>
+    <tr><td>cron-job.org</td><td>O "relógio" oficial (fuso nativo)</td><td>Grátis</td></tr>
+    <tr><td>GitHub Actions</td><td>O "computador" que roda o Python</td><td>Grátis</td></tr>
+    <tr><td><code>enviar.py</code></td><td>A lógica do negócio</td><td>—</td></tr>
+    <tr><td>Google Sheets</td><td>Banco de conteúdo e destinatários</td><td>Grátis</td></tr>
+    <tr><td>Service account (Google Cloud)</td><td>Permissão de leitura da planilha</td><td>Grátis</td></tr>
+    <tr><td>Gmail SMTP (Workspace)</td><td>Entrega dos e-mails</td><td>Incluso no Workspace</td></tr>
+    <tr><td>Apps Script</td><td>Backup histórico, <strong>desativado</strong></td><td>Grátis</td></tr>
+  </table>
+</section>
+
+<section id="planilha">
+  <h2>3. A planilha</h2>
+  <p><strong>Nome:</strong> Automação de Emails<strong>ID:</strong> <code>&lt;ID_DA_PLANILHA&gt;</code></p>
+  <div class="note">O código usa o <strong>ID</strong>, não o nome. Renomear a planilha é sempre seguro.</div>
+  <table>
+    <tr><th>Aba</th><th>Conteúdo</th><th>Colunas</th></tr>
+    <tr><td>Página1</td><td>Destinatários</td><td><code>FIRST NAME</code>, <code>EMAIL</code></td></tr>
+    <tr><td>Página2</td><td>Calendário de conteúdo</td><td><code>DAY</code>, <code>MESSAGES</code>, <code>IMAGE_URL</code></td></tr>
+  </table>
+  <h3>Regras de preenchimento</h3>
+  <ol>
+    <li><code>DAY</code> em texto no formato <code>yyyy-MM-dd</code>, uma linha por data.</li>
+    <li><code>IMAGE_URL</code> deve ser um link público de imagem (http/https).</li>
+    <li>Publicar um dia novo = adicionar a linha na Página2. Sem mexer em código ou agendamento.</li>
+  </ol>
+</section>
+
+<section id="credenciais">
+  <h2>4. Inventário de credenciais</h2>
+  <table>
+    <tr><th>Credencial</th><th>Para que serve</th><th>Onde vive</th><th>Como rotacionar</th></tr>
+    <tr><td>Chave da service account (<code>credentials.json</code> / Secret <code>CREDENTIALS_JSON</code>)</td><td>Ler a planilha</td><td>Pasta local + Secret no GitHub</td><td>Google Cloud → Service Accounts → Keys</td></tr>
+    <tr><td>App password do Workspace (Secret <code>GMAIL_APP_PASS</code>)</td><td>Enviar via SMTP</td><td>Secret no GitHub + fallback local p/ testes</td><td>Conta Google → Segurança → Senhas de app</td></tr>
+    <tr><td><code>GMAIL_USER</code></td><td>Conta remetente</td><td>Secret no GitHub</td><td>—</td></tr>
+    <tr><td>PAT fine-grained <code>cron-externo</code></td><td>cron-job.org disparar o workflow</td><td>Header do job no cron-job.org</td><td>GitHub → Developer settings → PATs</td></tr>
+  </table>
+  <div class="warn"><strong>Princípio:</strong> nenhum segredo real mora no código ou no repositório. O código usa <code>os.environ.get(...)</code> com placeholders; os valores reais são injetados em tempo de execução.</div>
+</section>
+
+<section id="codigo">
+  <h2>5. Código</h2>
+  <h3>5.1 enviar.py (versão de produção, valores sanitizados)</h3>
+<pre>import os
+import smtplib
+import time
+from datetime import datetime
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from zoneinfo import ZoneInfo
+
+import gspread
+
+# ── Configurações (valores reais via Secrets em produção) ──
+SHEET_ID         = "&lt;ID_DA_PLANILHA&gt;"
+CREDENTIALS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "credentials.json")
+GMAIL_USER       = os.environ.get("GMAIL_USER", "remetente@dominio.com")
+GMAIL_APP_PASS   = os.environ.get("GMAIL_APP_PASS", "xxxx xxxx xxxx xxxx")
+
+# ── 1. Conectar na planilha ───────────────────────────────
+gc = gspread.service_account(filename=CREDENTIALS_FILE)
+sh = gc.open_by_key(SHEET_ID)
+
+# "Hoje" no fuso da Flórida (Eastern Time), imune a horário de verão
+today = datetime.now(ZoneInfo("America/New_York")).date().isoformat()
+
+# ── 2. Mensagem do dia (Página2) ──────────────────────────
+messages = sh.worksheet("Página2").get_all_records()
+row = next((r for r in messages if str(r.get("DAY", "")).strip() == today), None)
+
+if not row:
+    print(f"[{today}] Nenhuma mensagem para hoje. Nada será enviado.")
+    raise SystemExit
+
+# ── 3. Destinatários (Página1) ────────────────────────────
+recipients = sh.worksheet("Página1").get_all_records()
+
+# ── 4. Enviar ─────────────────────────────────────────────
+server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+server.login(GMAIL_USER, GMAIL_APP_PASS)
+
+sent = 0
+for r in recipients:
+    email = str(r.get("EMAIL", "")).strip()
+    nome  = str(r.get("FIRST NAME") or r.get("NOME") or "").strip()
+    if not email:
+        continue
+
+    html_body = (
+        f"&lt;p&gt;Hello {nome} - {row['MESSAGES']}&lt;/p&gt;\n"
+        f"&lt;img src=\"{row['IMAGE_URL']}\" alt=\"Imagem do dia\" /&gt;"
+    )
+
+    msg = MIMEMultipart()
+    msg["From"] = f"Nome do Remetente &lt;{GMAIL_USER}&gt;"
+    msg["To"] = email
+    msg["Subject"] = f"How are you going {nome}?"
+    msg.attach(MIMEText(html_body, "html"))
+
+    server.sendmail(GMAIL_USER, [email], msg.as_string())
+    sent += 1
+    print(f"Enviado para {email}")
+    time.sleep(1)   # pausa anti-sobrecarga entre envios
+
+server.quit()
+print(f"Concluído: {sent} e-mail(s) enviado(s).")</pre>
+
+  <h3>5.2 exemplos/enviar.yml</h3>
+<pre>name: Email Diario
+
+on:
+  workflow_dispatch:      # único gatilho: chamado pelo cron-job.org (ou botão manual)
+
+jobs:
+  enviar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install gspread
+
+      - name: Criar credentials.json
+        env:
+          CREDENTIALS_JSON: ${{ secrets.CREDENTIALS_JSON }}
+        run: python -c "import os; open('credentials.json', 'w').write(os.environ['CREDENTIALS_JSON'])"
+
+      - name: Enviar e-mails
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+        run: python enviar.py</pre>
+
+  <h3>5.3 Configuração do cron-job.org</h3>
+  <table>
+    <tr><th>Campo</th><th>Valor</th></tr>
+    <tr><td>URL</td><td><code>https://api.github.com/repos/&lt;USUARIO&gt;/&lt;REPO&gt;/actions/workflows/enviar.yml/dispatches</code></td></tr>
+    <tr><td>Método</td><td><code>POST</code></td></tr>
+    <tr><td>Headers</td><td><code>Authorization: Bearer &lt;PAT&gt;</code> · <code>Accept: application/vnd.github+json</code> · <code>Content-Type: application/json</code></td></tr>
+    <tr><td>Body</td><td><code>{"ref":"main"}</code></td></tr>
+    <tr><td>Agenda</td><td>Diária, 09:00, timezone <strong>America/New_York</strong> (DST automático)</td></tr>
+  </table>
+</section>
+
+<section id="operacao">
+  <h2>6. Operação no dia a dia</h2>
+  <p><strong>Fluxo das 9h00:</strong> cron-job.org dispara → GitHub liga um servidor → Python lê a planilha → filtra o dia → envia um e-mail por destinatário (1s de intervalo) → log registrado.</p>
+  <ul>
+    <li><strong>Publicar conteúdo:</strong> adicionar linha na Página2.</li>
+    <li><strong>Gerenciar clientes:</strong> adicionar/remover linhas na Página1.</li>
+    <li><strong>Pausar um dia:</strong> não cadastrar mensagem para aquela data.</li>
+  </ul>
+  <h3>Execuções manuais (3 formas)</h3>
+  <ol>
+    <li>cron-job.org → botão de teste do job</li>
+    <li>GitHub → Actions → <em>Email Diario</em> → <strong>Run workflow</strong></li>
+    <li>Local → <code>py enviar.py</code> (usa credenciais de fallback do PC)</li>
+  </ol>
+  <h3>Monitoramento</h3>
+  <ul>
+    <li>GitHub → aba <strong>Actions</strong>: log completo de cada execução</li>
+    <li>cron-job.org → histórico do job + notificação de falha ativada</li>
+    <li>Log "Nenhuma mensagem para hoje" = comportamento normal, não é erro</li>
+  </ul>
+</section>
+
+<section id="manutencao">
+  <h2>7. Manutenção</h2>
+  <table>
+    <tr><th>Frequência</th><th>Tarefa</th></tr>
+    <tr><td>Diária</td><td>Nenhuma — o sistema é autônomo</td></tr>
+    <tr><td>Mensal</td><td>Conferir histórico do cron-job.org e últimas execuções no Actions</td></tr>
+    <tr><td>Na expiração do PAT</td><td>Gerar novo PAT e atualizar o header no cron-job.org</td></tr>
+    <tr><td>Ao trocar app password</td><td>Rotacionar → atualizar Secret <code>GMAIL_APP_PASS</code> (+ fallback local)</td></tr>
+    <tr><td>Ocasional</td><td>Revisar quem tem acesso ao repositório e à planilha</td></tr>
+  </table>
+</section>
+
+<section id="troubleshooting">
+  <h2>8. Troubleshooting (casos reais do projeto)</h2>
+  <table>
+    <tr><th>Sintoma</th><th>Causa provável</th><th>Solução</th></tr>
+    <tr><td>Não enviou e o log diz "Nenhuma mensagem para hoje"</td><td>Página2 sem linha para a data</td><td>Cadastrar a linha do dia</td></tr>
+    <tr><td>Nenhuma execução aparece no Actions</td><td>cron-job.org falhou (PAT expirado? URL errada?)</td><td>Ver histórico do cron-job.org; 401 = token, 404 = URL</td></tr>
+    <tr><td><code>SMTPAuthenticationError</code></td><td>App password expirada/bloqueada pelo admin</td><td>Rotacionar senha de app / liberar no Admin Console</td></tr>
+    <tr><td><code>SpreadsheetNotFound</code></td><td>Service account perdeu acesso à planilha</td><td>Recompartilhar planilha com o <code>client_email</code></td></tr>
+    <tr><td><code>ModuleNotFoundError: gspread</code> (local)</td><td>Dois Pythons instalados no PC</td><td><code>py -m pip install gspread</code></td></tr>
+    <tr><td><code>can't open file 'enviar.py'</code> no Actions</td><td>Execução usou commit antigo (botão Re-run)</td><td>Usar <strong>Run workflow</strong></td></tr>
+    <tr><td>E-mails em dobro</td><td>Dois sistemas ativos ao mesmo tempo</td><td>Conferir trigger do Apps Script e bloco <code>schedule</code> do yml</td></tr>
+    <tr><td>Bounces em Yahoo/AOL</td><td>SPF/DKIM/DMARC ausentes ou endereço inativo</td><td>Ajustar DNS do domínio + higienizar a lista</td></tr>
+  </table>
+</section>
+
+<section id="seguranca">
+  <h2>9. Segurança (práticas adotadas)</h2>
+  <ul>
+    <li>Repositório de produção <strong>privado</strong>; segredos apenas em GitHub Secrets / cron-job.org</li>
+    <li>PAT <strong>fine-grained</strong> com escopo mínimo (Actions read/write em 1 único repositório)</li>
+    <li>Service account com acesso de <strong>leitura</strong> apenas à planilha</li>
+    <li>App password em vez da senha real da conta</li>
+    <li>App password pessoal <strong>revogada</strong> após a migração para a conta da clínica</li>
+    <li>Credenciais locais existem só para teste manual e <strong>nunca são commitadas</strong></li>
+    <li>Versão pública (este documento) contém apenas placeholders</li>
+  </ul>
+</section>
+
+<section id="historico">
+  <h2>10. Histórico de decisões</h2>
+  <table>
+    <tr><th>Fase</th><th>Solução</th><th>Desfecho</th></tr>
+    <tr><td>1</td><td>n8n (workflow original)</td><td>Aposentado — serviu de especificação</td></tr>
+    <tr><td>2</td><td>Google Apps Script</td><td>Funcionou na nuvem; virou backup com trigger excluído</td></tr>
+    <tr><td>3</td><td>Python local</td><td>Ambiente de desenvolvimento e execução manual</td></tr>
+    <tr><td>4</td><td>PythonAnywhere</td><td>Scheduled tasks viraram recurso pago → descartado</td></tr>
+    <tr><td>5</td><td>Cron nativo do GitHub Actions</td><td>Instável em repo novo → descartado como relógio</td></tr>
+    <tr><td>6</td><td><strong>cron-job.org + GitHub Actions</strong></td><td>✅ Oficial: relógio confiável com fuso nativo + motor grátis</td></tr>
+  </table>
+</section>
+
+<section id="reconstruir">
+  <h2>11. Reconstruir do zero (resumo)</h2>
+  <ol>
+    <li>Criar projeto no Google Cloud + ativar Sheets/Drive API + service account + chave JSON</li>
+    <li>Compartilhar a planilha com o <code>client_email</code> da service account</li>
+    <li>Conta Workspace: 2FA + app password</li>
+    <li>GitHub: repo privado + <code>enviar.py</code> + <code>.github/workflows/enviar.yml</code></li>
+    <li>GitHub: Secrets <code>GMAIL_USER</code>, <code>GMAIL_APP_PASS</code>, <code>CREDENTIALS_JSON</code></li>
+    <li>GitHub: PAT fine-grained (Actions R/W no repo)</li>
+    <li>cron-job.org: job POST na API de dispatch, 09:00 America/New_York</li>
+    <li>Testar (botão de teste) e conferir log + caixa de entrada</li>
+  </ol>
+</section>
+
+<section id="evolucoes">
+  <h2>12. Evoluções futuras (ideias)</h2>
+  <ul>
+    <li>Layout HTML com identidade visual da clínica (cores, logo, botão)</li>
+    <li>Coluna <code>ATIVO</code> na Página1 para pausar destinatários sem excluir</li>
+    <li>Registrar status de envio de volta na planilha (coluna <code>LAST SENT</code>)</li>
+    <li>Mensagens segmentadas por grupo de clientes (incl. versão em português)</li>
+    <li>Anexos reais (PDF) além da imagem embutida</li>
+  </ul>
+</section>
+
+<footer>
+  Versão pública de demonstração — valores sensíveis substituídos por placeholders.<br />
+  Prática Extensionista · PUCPR (Inteligência Artificial)
+</footer>
+
+</div>
+</body>
+</html>
