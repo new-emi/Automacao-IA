@@ -41,7 +41,7 @@ flowchart TD
 ## 4. Estrutura do repositório
 
 ```text
-automacao-email/
+Automacao-IA/
 ├── README.md                   # Este arquivo
 ├── index.html                  # Documentação navegável em HTML
 ├── enviar.py                   # Script principal (versão sanitizada)
@@ -75,8 +75,8 @@ automacao-email/
 ### 6.1 Clonar e instalar
 
 ```bash
-git clone <url-do-repositorio>
-cd automacao-email
+git clone <git@github.com:new-emi/Automacao-IA.git>
+cd Automacao-IA
 python -m venv .venv
 pip install -r requirements.txt
 ```
@@ -125,7 +125,7 @@ py enviar.py
 [2026-10-XX] Enviado para cliente1@exemplo.com
 [2026-10-XX] Enviado para cliente2@exemplo.com
 [...]
-[2026-10-XX] Concluído: 12 e-mail(s) enviado(s).
+[2026-10-XX] Concluído: N e-mail(s) enviado(s).
 ```
 
 ### 8.2 Exemplo de e-mail entregue
