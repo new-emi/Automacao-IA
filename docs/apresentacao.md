@@ -1,7 +1,7 @@
 # Apresentação do Projeto
 
 ## Contexto
-Clínica internacional de saúde mental (atendimento bilíngue inglês/português) que combina prática clínica baseada em evidências com apoio comunitário. A equipe enfrentava grande volume de tarefas administrativas repetitivas — entre elas, o envio manual de e-mails diários com reflexões e imagens para sua lista de contatos.
+Clínica de saúde mental que combina prática clínica baseada em evidências com apoio comunitário. A equipe enfrentava grande volume de tarefas administrativas repetitivas — entre elas, o envio manual de e-mails diários com reflexões e imagens para sua lista de contatos.
 
 ## Justificativa
 Automatizar esse fluxo reduz erros humanos, padroniza a comunicação e devolve tempo clínico à equipe. Em um ambiente de saúde mental, a solução foi desenhada com cuidado redobrado com sigilo e segurança de dados: nenhuma credencial no código, acessos com escopo mínimo e repositório de produção privado.
